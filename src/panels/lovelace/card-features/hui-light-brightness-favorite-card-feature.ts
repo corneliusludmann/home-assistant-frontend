@@ -1,4 +1,4 @@
-import type { HassEntity, UnsubscribeFunc } from "home-assistant-js-websocket";
+import type { UnsubscribeFunc } from "home-assistant-js-websocket";
 import type { PropertyValues, TemplateResult } from "lit";
 import { html, LitElement } from "lit";
 import { customElement, property, state } from "lit/decorators";
@@ -178,12 +178,7 @@ class HuiLightBrightnessFavoriteCardFeature
             return;
           }
 
-          if (
-            entries.some(
-              (entry: HassEntity | { entity_id: string }) =>
-                entry.entity_id === entityId
-            )
-          ) {
+          if (entries.some((entry) => entry.entity_id === entityId)) {
             await this._loadEntityEntry(entityId);
             return;
           }
