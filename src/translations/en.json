@@ -1761,7 +1761,7 @@
           },
           "favorite_brightness": {
             "set": "Set brightness to {value}",
-            "edit": "Set brightness to {value}",
+            "edit": "Edit brightness {value}",
             "delete": "Delete favorite brightness {number}",
             "delete_confirm_title": "Delete favorite brightness?",
             "delete_confirm_text": "This favorite brightness will be permanently deleted.",
