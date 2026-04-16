@@ -90,6 +90,7 @@ export interface SensorEntityOptions {
 
 export interface LightEntityOptions {
   favorite_colors?: LightColor[];
+  favorite_brightness?: number[];
 }
 
 export interface ValveEntityOptions {
@@ -98,6 +99,7 @@ export interface ValveEntityOptions {
 
 export type FavoriteOption =
   | "favorite_colors"
+  | "favorite_brightness"
   | "favorite_positions"
   | "favorite_tilt_positions";
 

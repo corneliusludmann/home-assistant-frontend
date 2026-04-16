@@ -1758,6 +1758,17 @@
             "add": "Add new favorite color",
             "edit_title": "Edit favorite color",
             "add_title": "Add favorite color"
+          },
+          "favorite_brightness": {
+            "set": "Set brightness to {value}",
+            "edit": "Set brightness to {value}",
+            "delete": "Delete favorite brightness {number}",
+            "delete_confirm_title": "Delete favorite brightness?",
+            "delete_confirm_text": "This favorite brightness will be permanently deleted.",
+            "delete_confirm_action": "Delete",
+            "add": "Add new favorite brightness",
+            "edit_title": "Edit favorite brightness",
+            "add_title": "Add favorite brightness"
           }
         },
         "fan": {
@@ -9823,6 +9834,10 @@
               },
               "light-brightness": {
                 "label": "Light brightness"
+              },
+              "light-brightness-favorite": {
+                "label": "Light favorite brightness",
+                "description": "This feature uses the light's favorite brightness levels. To edit them, open the light's more info dialog and press and hold a favorite."
               },
               "light-color-favorites": {
                 "label": "Light color favorites",

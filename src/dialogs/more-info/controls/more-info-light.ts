@@ -36,6 +36,7 @@ import type { HomeAssistant } from "../../../types";
 import "../components/ha-more-info-control-select-container";
 import "../components/ha-more-info-state-header";
 import "../components/lights/ha-favorite-color-button";
+import "../components/lights/ha-more-info-light-favorite-brightness";
 import "../components/lights/ha-more-info-light-favorite-colors";
 import "../components/lights/light-color-rgb-picker";
 import "../components/lights/light-color-temp-picker";
@@ -120,6 +121,15 @@ class MoreInfoLight extends LitElement {
           shouldShowFavoriteOptions(
             this.entry.options?.light?.favorite_colors
           )))
+    );
+
+    const showFavoriteBrightness = Boolean(
+      this.entry &&
+      supportsBrightness &&
+      (this.editMode ||
+        shouldShowFavoriteOptions(
+          this.entry.options?.light?.favorite_brightness
+        ))
     );
 
     return html`
@@ -256,6 +266,17 @@ class MoreInfoLight extends LitElement {
                       @favorite-color-edit-started=${this._resetMainControl}
                     >
                     </ha-more-info-light-favorite-colors>
+                  `
+                : nothing}
+              ${showFavoriteBrightness
+                ? html`
+                    <ha-more-info-light-favorite-brightness
+                      .hass=${this.hass}
+                      .stateObj=${this.stateObj}
+                      .entry=${this.entry}
+                      .editMode=${this.editMode}
+                    >
+                    </ha-more-info-light-favorite-brightness>
                   `
                 : nothing}
             `

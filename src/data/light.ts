@@ -161,3 +161,35 @@ export const computeDefaultFavoriteColors = (
 };
 
 export const formatTempColor = (value: number) => `${value} K`;
+
+export const DEFAULT_LIGHT_FAVORITE_BRIGHTNESS = [0, 25, 50, 75, 100];
+
+export const normalizeLightFavoriteBrightness = (
+  values?: number[]
+): number[] => {
+  if (!values) {
+    return [];
+  }
+
+  const unique = new Set<number>();
+  const normalized: number[] = [];
+
+  for (const val of values) {
+    const num = Number(val);
+
+    if (isNaN(num)) {
+      continue;
+    }
+
+    const clamped = Math.max(0, Math.min(100, Math.round(num)));
+
+    if (unique.has(clamped)) {
+      continue;
+    }
+
+    unique.add(clamped);
+    normalized.push(clamped);
+  }
+
+  return normalized;
+};
