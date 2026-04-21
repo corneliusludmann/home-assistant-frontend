@@ -4,7 +4,10 @@ import { customElement, property, state } from "lit/decorators";
 import type { HASSDomEvent } from "../../../../common/dom/fire_event";
 import { fireEvent } from "../../../../common/dom/fire_event";
 import { UNAVAILABLE } from "../../../../data/entity/entity";
-import type { ExtEntityRegistryEntry } from "../../../../data/entity/entity_registry";
+import type {
+  ExtEntityRegistryEntry,
+  LightEntityOptions,
+} from "../../../../data/entity/entity_registry";
 import { updateEntityRegistryEntry } from "../../../../data/entity/entity_registry";
 import type { LightColor, LightEntity } from "../../../../data/light";
 import { computeDefaultFavoriteColors } from "../../../../data/light";
@@ -60,12 +63,17 @@ export class HaMoreInfoLightFavoriteColors extends LitElement {
   }
 
   private async _save(newFavoriteColors: LightColor[]): Promise<void> {
+    const currentOptions: LightEntityOptions = {
+      ...(this.entry!.options?.light ?? {}),
+    };
+
     const result = await updateEntityRegistryEntry(
       this.hass,
       this.entry!.entity_id,
       {
         options_domain: "light",
         options: {
+          ...currentOptions,
           favorite_colors: newFavoriteColors,
         },
       }

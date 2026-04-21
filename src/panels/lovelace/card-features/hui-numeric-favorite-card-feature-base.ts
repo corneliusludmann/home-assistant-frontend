@@ -34,16 +34,16 @@ export interface NumericFavoriteCardFeatureDefinition<
   TEntity extends NumericFavoriteEntity,
 > {
   domain: string;
-  supportsPosition: (stateObj: TEntity) => boolean;
-  getFavoritePositions: (
+  supportsValue: (stateObj: TEntity) => boolean;
+  getFavoriteValues: (
     entry?: ExtEntityRegistryEntry | null
   ) => number[] | undefined;
   getCurrentValue: (stateObj: TEntity) => number | undefined;
-  normalizeFavoritePositions: (positions?: number[]) => number[];
-  defaultFavoritePositions: number[];
-  setPositionService: string;
+  normalizeFavoriteValues: (values?: number[]) => number[];
+  defaultFavoriteValues: number[];
+  setValueService: string;
   serviceDataKey: string;
-  setPositionLabelKey: LocalizeKeys;
+  setValueLabelKey: LocalizeKeys;
   featureLabelKey: LocalizeKeys;
 }
 
@@ -64,7 +64,7 @@ export const supportsNumericFavoriteCardFeature = <
 
   return (
     computeDomain(stateObj.entity_id) === definition.domain &&
-    definition.supportsPosition(stateObj)
+    definition.supportsValue(stateObj)
   );
 };
 
@@ -85,7 +85,7 @@ export abstract class HuiNumericFavoriteCardFeatureBase<
 
   @state() protected _entry?: ExtEntityRegistryEntry | null;
 
-  @state() protected _currentPosition?: number;
+  @state() protected _currentValue?: number;
 
   private _unsubEntityRegistry?: UnsubscribeFunc;
 
@@ -134,9 +134,7 @@ export abstract class HuiNumericFavoriteCardFeatureBase<
         : undefined;
 
       if (oldStateObj !== this._stateObj) {
-        this._currentPosition = this._definition.getCurrentValue(
-          this._stateObj
-        );
+        this._currentValue = this._definition.getCurrentValue(this._stateObj);
       }
     }
 
@@ -247,31 +245,31 @@ export abstract class HuiNumericFavoriteCardFeatureBase<
       return;
     }
 
-    const position = Number(value);
+    const newValue = Number(value);
 
-    if (isNaN(position)) {
+    if (isNaN(newValue)) {
       return;
     }
 
-    const oldPosition = this._definition.getCurrentValue(this._stateObj);
+    const oldValue = this._definition.getCurrentValue(this._stateObj);
 
-    if (position === oldPosition) {
+    if (newValue === oldValue) {
       return;
     }
 
-    this._currentPosition = position;
+    this._currentValue = newValue;
 
     try {
       await this.hass.callService(
         this._definition.domain,
-        this._definition.setPositionService,
+        this._definition.setValueService,
         {
           entity_id: this._stateObj.entity_id,
-          [this._definition.serviceDataKey]: position,
+          [this._definition.serviceDataKey]: newValue,
         }
       );
     } catch (_err) {
-      this._currentPosition = oldPosition;
+      this._currentValue = oldValue;
     }
   }
 
@@ -290,27 +288,27 @@ export abstract class HuiNumericFavoriteCardFeatureBase<
       return null;
     }
 
-    const positions = this._definition.normalizeFavoritePositions(
-      this._definition.getFavoritePositions(this._entry) ??
-        this._definition.defaultFavoritePositions
+    const values = this._definition.normalizeFavoriteValues(
+      this._definition.getFavoriteValues(this._entry) ??
+        this._definition.defaultFavoriteValues
     );
 
     const hass = this.hass;
 
-    if (positions.length === 0 || !hass) {
+    if (values.length === 0 || !hass) {
       return null;
     }
 
-    const options = positions.map((position) => ({
-      value: String(position),
-      label: `${position}%`,
-      ariaLabel: hass.localize(this._definition.setPositionLabelKey, {
-        value: `${position}%`,
+    const options = values.map((value) => ({
+      value: String(value),
+      label: `${value}%`,
+      ariaLabel: hass.localize(this._definition.setValueLabelKey, {
+        value: `${value}%`,
       }),
     }));
 
     const currentValue =
-      this._currentPosition != null ? String(this._currentPosition) : undefined;
+      this._currentValue != null ? String(this._currentValue) : undefined;
 
     const color = this.color
       ? computeCssColor(this.color)

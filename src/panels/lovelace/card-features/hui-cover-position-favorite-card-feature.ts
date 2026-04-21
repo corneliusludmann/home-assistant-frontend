@@ -20,14 +20,14 @@ import { getMoreInfoHintCardFeatureEditor } from "./get-more-info-hint-card-feat
 const coverPositionFavoriteCardFeatureDefinition: NumericFavoriteCardFeatureDefinition<CoverEntity> =
   {
     domain: "cover",
-    supportsPosition: coverSupportsPosition,
-    getFavoritePositions: (entry) => entry?.options?.cover?.favorite_positions,
+    supportsValue: coverSupportsPosition,
+    getFavoriteValues: (entry) => entry?.options?.cover?.favorite_positions,
     getCurrentValue: (stateObj) => stateObj.attributes.current_position,
-    normalizeFavoritePositions: normalizeCoverFavoritePositions,
-    defaultFavoritePositions: DEFAULT_COVER_FAVORITE_POSITIONS,
-    setPositionService: "set_cover_position",
+    normalizeFavoriteValues: normalizeCoverFavoritePositions,
+    defaultFavoriteValues: DEFAULT_COVER_FAVORITE_POSITIONS,
+    setValueService: "set_cover_position",
     serviceDataKey: "position",
-    setPositionLabelKey:
+    setValueLabelKey:
       "ui.dialogs.more_info_control.cover.favorite_position.set",
     featureLabelKey:
       "ui.panel.lovelace.editor.features.types.cover-position-favorite.label",
