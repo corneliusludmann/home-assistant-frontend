@@ -46,6 +46,8 @@ export class HaMoreInfoLightFavoriteBrightness extends LitElement {
 
   @property({ attribute: false }) public editMode?: boolean;
 
+  @property({ type: Boolean, attribute: false }) public showDone = true;
+
   @state() private _favoriteBrightness: number[] = [];
 
   protected updated(changedProps: PropertyValues<this>): void {
@@ -307,7 +309,7 @@ export class HaMoreInfoLightFavoriteBrightness extends LitElement {
           .editMode=${this.editMode ?? false}
           .disabled=${this.stateObj.state === UNAVAILABLE}
           .isAdmin=${Boolean(this.hass.user?.is_admin)}
-          .showDone=${true}
+          .showDone=${this.showDone}
           .addLabel=${this._localizeFavorite("add")}
           .doneLabel=${this.hass.localize(
             "ui.dialogs.more_info_control.exit_edit_mode"

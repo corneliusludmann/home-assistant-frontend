@@ -34,6 +34,8 @@ export class HaMoreInfoLightFavoriteColors extends LitElement {
 
   @property({ attribute: false }) public editMode?: boolean;
 
+  @property({ type: Boolean, attribute: false }) public showDone = true;
+
   @state() private _favoriteColors: LightColor[] = [];
 
   protected updated(changedProps: PropertyValues): void {
@@ -219,6 +221,7 @@ export class HaMoreInfoLightFavoriteColors extends LitElement {
         .editMode=${this.editMode}
         .disabled=${this.stateObj.state === UNAVAILABLE}
         .isAdmin=${Boolean(this.hass.user?.is_admin)}
+        .showDone=${this.showDone}
         .addLabel=${this.hass.localize(
           "ui.dialogs.more_info_control.light.favorite_color.add"
         )}

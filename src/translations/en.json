@@ -1734,7 +1734,7 @@
           "reset_favorites": "Reset favorites",
           "reset_favorites_text": "Do you want to reset all favorites for this light back to default?",
           "copy_favorites": "Copy favorites to...",
-          "copy_favorites_helper": "Select one or more lights to receive the copied favorites from this light (must support same color modes and brightness).",
+          "copy_favorites_helper": "Select one or more lights to receive the copied favorites from this light. Each light only receives the favorites it supports (matching color modes and/or brightness).",
           "copy_favorites_entities": "[%key:ui::panel::lovelace::editor::card::generic::entities%]",
           "toggle": "Toggle",
           "color": "Color",
@@ -9836,7 +9836,7 @@
                 "label": "Light brightness"
               },
               "light-brightness-favorite": {
-                "label": "Light favorite brightness",
+                "label": "Light brightness favorites",
                 "description": "This feature uses the light's favorite brightness levels. To edit them, open the light's more info dialog and press and hold a favorite."
               },
               "light-color-favorites": {

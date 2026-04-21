@@ -263,6 +263,7 @@ class MoreInfoLight extends LitElement {
                       .stateObj=${this.stateObj}
                       .entry=${this.entry}
                       .editMode=${this.editMode}
+                      .showDone=${!showFavoriteBrightness}
                       @favorite-color-edit-started=${this._resetMainControl}
                     >
                     </ha-more-info-light-favorite-colors>

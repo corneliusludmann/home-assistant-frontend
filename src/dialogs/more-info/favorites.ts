@@ -94,7 +94,7 @@ const copyFavoriteOptionsToEntities = async (
   hass: HomeAssistant,
   domain: FavoritesDomain,
   includeEntities: string[],
-  options: object
+  options: object | ((entityId: string) => object)
 ) => {
   const registryBackedEntities = includeEntities.filter(
     (entityId) => entityId in hass.entities
@@ -129,11 +129,14 @@ const copyFavoriteOptionsToEntities = async (
   });
 
   if (selected?.entity) {
+    const resolveOptions =
+      typeof options === "function" ? options : () => options;
+
     const result = await Promise.allSettled(
       selected.entity.map((entityId: string) =>
         updateEntityRegistryEntry(hass, entityId, {
           options_domain: domain,
-          options,
+          options: resolveOptions(entityId),
         })
       )
     );
@@ -289,6 +292,19 @@ const lightFavoritesHandler: FavoritesDialogHandler = {
       ...new Set(favoriteColors.map((item) => Object.keys(item)[0])),
     ];
 
+    const candidateSupportsColors = (candidate: LightEntity): boolean =>
+      favoriteTypes.every((type) =>
+        type === "color_temp_kelvin"
+          ? lightSupportsColorMode(candidate, LightColorMode.COLOR_TEMP)
+          : type === "hs_color" || type === "rgb_color"
+            ? lightSupportsColor(candidate)
+            : type === "rgbw_color"
+              ? lightSupportsColorMode(candidate, LightColorMode.RGBW)
+              : type === "rgbww_color"
+                ? lightSupportsColorMode(candidate, LightColorMode.RGBWW)
+                : false
+      );
+
     const compatibleLights = Object.values(hass.states).filter((candidate) => {
       if (
         candidate.entity_id === lightStateObj.entity_id ||
@@ -297,40 +313,37 @@ const lightFavoritesHandler: FavoritesDialogHandler = {
         return false;
       }
       const candidateLight = candidate as LightEntity;
-      if (
-        supportsBrightnessFavorites &&
-        !lightSupportsBrightness(candidateLight)
-      ) {
-        return false;
-      }
-      return favoriteTypes.every((type) =>
-        type === "color_temp_kelvin"
-          ? lightSupportsColorMode(candidateLight, LightColorMode.COLOR_TEMP)
-          : type === "hs_color" || type === "rgb_color"
-            ? lightSupportsColor(candidateLight)
-            : type === "rgbw_color"
-              ? lightSupportsColorMode(candidateLight, LightColorMode.RGBW)
-              : type === "rgbww_color"
-                ? lightSupportsColorMode(candidateLight, LightColorMode.RGBWW)
-                : false
-      );
+      const colorsCompatible =
+        supportsColors && candidateSupportsColors(candidateLight);
+      const brightnessCompatible =
+        supportsBrightnessFavorites && lightSupportsBrightness(candidateLight);
+      return colorsCompatible || brightnessCompatible;
     });
 
-    const options: Partial<Record<FavoriteOption, LightColor[] | number[]>> =
-      {};
-    if (supportsColors) {
-      options.favorite_colors = favoriteColors;
-    }
-    if (supportsBrightnessFavorites) {
-      options.favorite_brightness = favoriteBrightness;
-    }
+    const optionsForEntity = (
+      entityId: string
+    ): Partial<Record<FavoriteOption, LightColor[] | number[]>> => {
+      const candidate = hass.states[entityId] as LightEntity | undefined;
+      const options: Partial<Record<FavoriteOption, LightColor[] | number[]>> =
+        {};
+      if (!candidate) {
+        return options;
+      }
+      if (supportsColors && candidateSupportsColors(candidate)) {
+        options.favorite_colors = favoriteColors;
+      }
+      if (supportsBrightnessFavorites && lightSupportsBrightness(candidate)) {
+        options.favorite_brightness = favoriteBrightness;
+      }
+      return options;
+    };
 
     await copyFavoriteOptionsToEntities(
       host,
       hass,
       "light",
       compatibleLights.map((light) => light.entity_id),
-      options
+      optionsForEntity
     );
   },
 };
