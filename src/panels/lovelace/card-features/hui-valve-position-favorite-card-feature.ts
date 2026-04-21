@@ -20,14 +20,14 @@ import { getMoreInfoHintCardFeatureEditor } from "./get-more-info-hint-card-feat
 const valvePositionFavoriteCardFeatureDefinition: NumericFavoriteCardFeatureDefinition<ValveEntity> =
   {
     domain: "valve",
-    supportsValue: valveSupportsPosition,
-    getFavoriteValues: (entry) => entry?.options?.valve?.favorite_positions,
+    supportsPosition: valveSupportsPosition,
+    getFavoritePositions: (entry) => entry?.options?.valve?.favorite_positions,
     getCurrentValue: (stateObj) => stateObj.attributes.current_position,
-    normalizeFavoriteValues: normalizeValveFavoritePositions,
-    defaultFavoriteValues: DEFAULT_VALVE_FAVORITE_POSITIONS,
-    setValueService: "set_valve_position",
+    normalizeFavoritePositions: normalizeValveFavoritePositions,
+    defaultFavoritePositions: DEFAULT_VALVE_FAVORITE_POSITIONS,
+    setPositionService: "set_valve_position",
     serviceDataKey: "position",
-    setValueLabelKey:
+    setPositionLabelKey:
       "ui.dialogs.more_info_control.valve.favorite_position.set",
     featureLabelKey:
       "ui.panel.lovelace.editor.features.types.valve-position-favorite.label",
