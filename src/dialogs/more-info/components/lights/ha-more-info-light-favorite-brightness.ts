@@ -72,6 +72,9 @@ export class HaMoreInfoLightFavoriteBrightness extends LitElement {
   }
 
   private _currentValue(): number | undefined {
+    if (this.stateObj.state === "off") {
+      return 0;
+    }
     const brightness = this.stateObj.attributes.brightness;
     return brightness != null
       ? Math.round((brightness * 100) / 255)

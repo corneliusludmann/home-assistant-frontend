@@ -20,15 +20,15 @@ import { getMoreInfoHintCardFeatureEditor } from "./get-more-info-hint-card-feat
 const coverTiltFavoriteCardFeatureDefinition: NumericFavoriteCardFeatureDefinition<CoverEntity> =
   {
     domain: "cover",
-    supportsPosition: coverSupportsTiltPosition,
-    getFavoritePositions: (entry) =>
+    supportsValue: coverSupportsTiltPosition,
+    getFavoriteValues: (entry) =>
       entry?.options?.cover?.favorite_tilt_positions,
     getCurrentValue: (stateObj) => stateObj.attributes.current_tilt_position,
-    normalizeFavoritePositions,
-    defaultFavoritePositions: DEFAULT_COVER_FAVORITE_POSITIONS,
-    setPositionService: "set_cover_tilt_position",
+    normalizeFavoriteValues: normalizeFavoritePositions,
+    defaultFavoriteValues: DEFAULT_COVER_FAVORITE_POSITIONS,
+    setValueService: "set_cover_tilt_position",
     serviceDataKey: "tilt_position",
-    setPositionLabelKey:
+    setValueLabelKey:
       "ui.dialogs.more_info_control.cover.favorite_tilt_position.set",
     featureLabelKey:
       "ui.panel.lovelace.editor.features.types.cover-tilt-favorite.label",

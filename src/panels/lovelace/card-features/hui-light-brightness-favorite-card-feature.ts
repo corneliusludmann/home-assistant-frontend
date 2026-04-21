@@ -20,17 +20,21 @@ import { getMoreInfoHintCardFeatureEditor } from "./get-more-info-hint-card-feat
 const lightBrightnessFavoriteCardFeatureDefinition: NumericFavoriteCardFeatureDefinition<LightEntity> =
   {
     domain: "light",
-    supportsPosition: lightSupportsBrightness,
-    getFavoritePositions: (entry) => entry?.options?.light?.favorite_brightness,
-    getCurrentValue: (stateObj) =>
-      stateObj.attributes.brightness != null
+    supportsValue: lightSupportsBrightness,
+    getFavoriteValues: (entry) => entry?.options?.light?.favorite_brightness,
+    getCurrentValue: (stateObj) => {
+      if (stateObj.state === "off") {
+        return 0;
+      }
+      return stateObj.attributes.brightness != null
         ? Math.round((stateObj.attributes.brightness * 100) / 255)
-        : undefined,
-    normalizeFavoritePositions: normalizeLightFavoriteBrightness,
-    defaultFavoritePositions: DEFAULT_LIGHT_FAVORITE_BRIGHTNESS,
-    setPositionService: "turn_on",
+        : undefined;
+    },
+    normalizeFavoriteValues: normalizeLightFavoriteBrightness,
+    defaultFavoriteValues: DEFAULT_LIGHT_FAVORITE_BRIGHTNESS,
+    setValueService: "turn_on",
     serviceDataKey: "brightness_pct",
-    setPositionLabelKey:
+    setValueLabelKey:
       "ui.dialogs.more_info_control.light.favorite_brightness.set",
     featureLabelKey:
       "ui.panel.lovelace.editor.features.types.light-brightness-favorite.label",

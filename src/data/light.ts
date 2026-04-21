@@ -162,7 +162,7 @@ export const computeDefaultFavoriteColors = (
 
 export const formatTempColor = (value: number) => `${value} K`;
 
-export const DEFAULT_LIGHT_FAVORITE_BRIGHTNESS = [0, 25, 50, 75, 100];
+export const DEFAULT_LIGHT_FAVORITE_BRIGHTNESS = [0, 25, 75, 100];
 
 export const normalizeLightFavoriteBrightness = (
   values?: number[]
