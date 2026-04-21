@@ -122,16 +122,10 @@ export class HaMoreInfoLightFavoriteBrightness extends LitElement {
       return;
     }
 
-    if (favorite === 0) {
-      this.hass.callService("light", "turn_off", {
-        entity_id: this.stateObj.entity_id,
-      });
-    } else {
-      this.hass.callService("light", "turn_on", {
-        entity_id: this.stateObj.entity_id,
-        brightness_pct: favorite,
-      });
-    }
+    this.hass.callService("light", "turn_on", {
+      entity_id: this.stateObj.entity_id,
+      brightness_pct: favorite,
+    });
   }
 
   private async _promptFavoriteValue(
